@@ -2,7 +2,7 @@
 
 Version 1.1.0
 
-A Windows tray app for managing and expanding text snippets — keyboard triggers, dynamic variables, fill-in template prompts, tag-based organization, a bounded clipboard history, and a Spotlight-style quick-access window you can summon from anywhere with a global hotkey. This is an independent Windows port of [Snipster](../Snipster) for macOS, built from scratch against the Win32 and WPF APIs rather than sharing any code with it — see "Differences from the macOS version" below for where the two diverge.
+A Windows tray app for managing and expanding text snippets. It has keyboard triggers, dynamic variables, fill-in template prompts, tag-based organization, a bounded clipboard history, and a Spotlight-style quick-access window you can summon from anywhere with a global hotkey. This is an independent Windows port of [Snipster](../Snipster) for macOS, built from scratch against the Win32 and WPF APIs rather than sharing any code with it. See "Differences from the macOS version" below for where the two diverge.
 
 ## Quick access
 
@@ -10,17 +10,17 @@ Press the hotkey from anywhere (`Ctrl+Shift+S` by default, customizable in Prefe
 
 ## Clipboard history
 
-A running, in-memory record of your last several copies — nothing is ever written to disk, and it's always empty again after Snipster restarts. Reach it from the tray icon's Clipboard History menu; each entry is its own submenu with two actions: Copy to Clipboard, or Create Snippet from This, which opens the snippet editor with that content already filled in and the cursor waiting in the Trigger field.
+A running, in-memory record of your last several copies. Nothing is ever written to disk, and it's always empty again after Snipster restarts. Reach it from the tray icon's Clipboard History menu. Each entry is its own submenu with two actions: Copy to Clipboard, or Create Snippet from This, which opens the snippet editor with that content already filled in and the cursor waiting in the Trigger field.
 
-Copies from apps that mark their clipboard content as excluded from monitoring — password managers, for instance — are never recorded, following the same `ExcludeClipboardContentFromMonitorProcessing` convention Windows itself defines for this purpose.
+Copies from apps that mark their clipboard content as excluded from monitoring (password managers, for instance) are never recorded, following the same `ExcludeClipboardContentFromMonitorProcessing` convention Windows itself defines for this purpose.
 
 History size (10, 25, 50, or 100 entries) is configurable from Preferences, along with a Clear Now button.
 
 ## Text expansion
 
-Snippets expand via clipboard-based insertion, triggered by a prefix-plus-keyword pattern like `!email` or `!addr`. A global low-level keyboard hook watches for these patterns system-wide, deletes the typed trigger, and pastes the replacement — clipboard-and-paste rather than synthesizing keystrokes directly, because many modern applications don't reliably pick up synthetic keystrokes the way they pick up an actual paste. Trigger uniqueness is validated when you save a snippet, so two snippets can never silently shadow each other. Expansion can be turned off entirely from the tray menu or Preferences without closing Snipster.
+Snippets expand via clipboard-based insertion, triggered by a prefix-plus-keyword pattern like `!email` or `!addr`. A global low-level keyboard hook watches for these patterns system-wide, deletes the typed trigger, and pastes the replacement. It uses clipboard-and-paste rather than synthesizing keystrokes directly, because many modern applications don't reliably pick up synthetic keystrokes the way they pick up an actual paste. Trigger uniqueness is validated when you save a snippet, so two snippets can never silently shadow each other. Expansion can be turned off entirely from the tray menu or Preferences without closing Snipster.
 
-Windows' own security model (UIPI) prevents any application — Snipster included — from observing or injecting keystrokes into a window running at a higher privilege level, such as an elevated terminal. This is the direct Windows equivalent of macOS requiring Accessibility permission for the same capability.
+Windows' own security model (UIPI) prevents any application (Snipster included) from observing or injecting keystrokes into a window running at a higher privilege level, such as an elevated terminal. This is the direct Windows equivalent of macOS requiring Accessibility permission for the same capability.
 
 ## Dynamic variables
 
@@ -34,21 +34,21 @@ Any field whose label looks like it wants a name, email address, phone number, o
 
 ## Managing snippets
 
-Add, edit, and delete snippets from the Manage Snippets window, reachable from the tray icon. A snippet doesn't need a tag at all — tags are purely organizational.
+Add, edit, and delete snippets from the Manage Snippets window, reachable from the tray icon. A snippet doesn't need a tag at all, since tags are purely organizational.
 
 Tags get their own name and color, set through a real color picker (or typed as a hex code directly) from the Manage Tags window, which also shows a live count of how many snippets use each tag. Deleting a tag clears it from any snippets that referenced it rather than leaving a dangling reference behind.
 
-Each snippet in the list shows a small dot in its tag's color, so you can see how the library is organized at a glance. Check "Group by tag" to cluster the list under a collapsible header per tag (plus one for snippets with no tag), each with its own disclosure triangle — click one to hide or show just that tag's snippets, or use the Expand All / Collapse All buttons above the list to do it for every group at once. Whether grouping is on and which groups you left collapsed are both remembered the next time you open Manage Snippets, even across a restart.
+Each snippet in the list shows a small dot in its tag's color, so you can see how the library is organized at a glance. Check "Group by tag" to cluster the list under a collapsible header per tag (plus one for snippets with no tag), each with its own disclosure triangle. Click one to hide or show just that tag's snippets, or use the Expand All / Collapse All buttons above the list to do it for every group at once. Whether grouping is on and which groups you left collapsed are both remembered the next time you open Manage Snippets, even across a restart.
 
-Export writes the whole library to a JSON file. Import shows a preview of exactly what a file contains — every trigger and a preview of its content, with any multi-line content made visible rather than hidden as a single line — before anything is merged in, and any incoming trigger that collides with an existing one is skipped and flagged in that preview.
+Export writes the whole library to a JSON file. Import shows a preview of exactly what a file contains before anything is merged in: every trigger and a preview of its content, with any multi-line content made visible rather than hidden as a single line. Any incoming trigger that collides with an existing one is skipped and flagged in that preview.
 
 ## Preferences
 
-Reachable from the tray icon's right-click menu. Covers launching Snipster at Windows startup, enabling or disabling text expansion, changing the quick-access hotkey (a candidate combo is tested against every other running application before it's accepted, so you can never end up with a hotkey that silently doesn't work), clipboard history size, and where the snippet library itself is stored — the default location, or a folder you point it at, such as a OneDrive or Dropbox folder you want it to sync through.
+Reachable from the tray icon's right-click menu. It covers launching Snipster at Windows startup, enabling or disabling text expansion, changing the quick-access hotkey (a candidate combo is tested against every other running application before it's accepted, so you can never end up with a hotkey that silently doesn't work), clipboard history size, and where the snippet library itself is stored: the default location, or a folder you point it at, such as a OneDrive or Dropbox folder you want it to sync through.
 
 ## Installing
 
-Download `Snipster-Setup.exe` from the [latest release](https://github.com/ramos1053/RamosTech/releases/tag/snipster-windows-v1.1.0) and run it — it installs entirely into your own user profile and never asks for administrator rights, so it works the same way whether or not your Windows account has local admin permissions. It adds a Start Menu shortcut and, if you check the box during install, a desktop shortcut. Uninstall it the normal way, from Windows' Apps list or the Start Menu shortcut.
+Download `Snipster-Setup.exe` from the [latest release](https://github.com/ramos1053/RamosTech/releases/tag/snipster-windows-v1.1.0) and run it. It installs entirely into your own user profile and never asks for administrator rights, so it works the same way whether or not your Windows account has local admin permissions. It adds a Start Menu shortcut and, if you check the box during install, a desktop shortcut. Uninstall it the normal way, from Windows' Apps list or the Start Menu shortcut.
 
 ## Building from source
 
@@ -59,7 +59,7 @@ dotnet build
 dotnet run
 ```
 
-No Visual Studio installation is required — the project also opens and runs fine in Visual Studio or Rider if you prefer either of those. To produce a distributable build the same way the installer does:
+No Visual Studio installation is required. The project also opens and runs fine in Visual Studio or Rider if you prefer either of those. To produce a distributable build the same way the installer does:
 
 ```
 dotnet publish -c Release -r win-x64 --self-contained true
@@ -69,7 +69,7 @@ dotnet publish -c Release -r win-x64 --self-contained true
 
 - Windows 10 version 1607 or later, or Windows 11
 - No administrator rights needed to install or run
-- Nothing else to install separately — the installer bundles its own copy of the .NET runtime
+- Nothing else to install separately, since the installer bundles its own copy of the .NET runtime
 
 ## Keyboard shortcuts
 
@@ -77,16 +77,16 @@ dotnet publish -c Release -r win-x64 --self-contained true
 
 ## How it's built
 
-`TextExpansionMonitor` installs a `WH_KEYBOARD_LL` hook and matches typed text against snippet triggers; `KeyboardLayoutTranslator` turns each keystroke into the character it actually produces under the active window's real keyboard layout and modifier state via `ToUnicodeEx`, rather than assuming a US layout. `HotkeyManager` wraps `RegisterHotKey` with a conflict probe so a hotkey change can never silently fail. `ClipboardHistoryMonitor` uses `AddClipboardFormatListener` — event-driven, not polled. `FileStorageManager` persists the library as a single JSON file with an atomic write-then-rename. `TrayIconManager` uses WinForms' `NotifyIcon`, since WPF has no first-party tray icon API, alongside WPF for every window and dialog in the app. `StartupManager` handles "launch at Windows startup" through the per-user `HKCU\...\Run` registry key (cleaned up automatically on uninstall), and `DebugLog` writes a size-capped (1MB) diagnostic log for the keyboard hook that deliberately never records raw keystrokes, clipboard contents, or snippet text — just structural events — so it can't double as an accidental keylogger. None of this requires administrator rights or any elevated capability — the app's manifest explicitly declares `asInvoker`, and every Win32 API it calls (`RegisterHotKey`, `SetWindowsHookEx`, `AddClipboardFormatListener`, `SendInput`) is a standard, non-elevated, per-user API.
+`TextExpansionMonitor` installs a `WH_KEYBOARD_LL` hook and matches typed text against snippet triggers. `KeyboardLayoutTranslator` turns each keystroke into the character it actually produces under the active window's real keyboard layout and modifier state via `ToUnicodeEx`, rather than assuming a US layout. `HotkeyManager` wraps `RegisterHotKey` with a conflict probe so a hotkey change can never silently fail. `ClipboardHistoryMonitor` uses `AddClipboardFormatListener`, so it's event-driven, not polled. `FileStorageManager` persists the library as a single JSON file with an atomic write-then-rename. `TrayIconManager` uses WinForms' `NotifyIcon`, since WPF has no first-party tray icon API, alongside WPF for every window and dialog in the app. `StartupManager` handles "launch at Windows startup" through the per-user `HKCU\...\Run` registry key (cleaned up automatically on uninstall). `DebugLog` writes a size-capped (1MB) diagnostic log for the keyboard hook that deliberately never records raw keystrokes, clipboard contents, or snippet text. It logs only structural events, so it can't double as an accidental keylogger. None of this requires administrator rights or any elevated capability. The app's manifest explicitly declares `asInvoker`, and every Win32 API it calls (`RegisterHotKey`, `SetWindowsHookEx`, `AddClipboardFormatListener`, `SendInput`) is a standard, non-elevated, per-user API.
 
-The per-tag disclosure triangles in Manage Snippets are a plain WPF `Expander` wrapped around each group's `ItemsPresenter` via `GroupStyle.ContainerStyle` — no custom collapsing logic, just the control WPF already ships with. Which groups are collapsed lives in `Preferences.SnippetManagerCollapsedTagGroups`, written through `PreferencesStore` on every toggle so it survives a restart.
+The per-tag disclosure triangles in Manage Snippets are a plain WPF `Expander` wrapped around each group's `ItemsPresenter` via `GroupStyle.ContainerStyle`, with no custom collapsing logic, just the control WPF already ships with. Which groups are collapsed lives in `Preferences.SnippetManagerCollapsedTagGroups`, written through `PreferencesStore` on every toggle so it survives a restart.
 
 ## Differences from the macOS version
 
-This port covers the macOS app's core feature set but isn't a line-for-line match. Contacts are a small local address book instead of the system Contacts database, since Windows has no equivalent store shared across ordinary desktop apps. There's no Explorer integration comparable to the macOS Finder Copy Path service. The dynamic-variable set is narrower — no long-form or custom date formats, no reaching further back into clipboard history than the most recent copy, no cursor-placement token. Import supports one conflict strategy (skip duplicates) rather than a choice between merge, replace, and skip. There's no favorites/starring, duplication, or multi-select delete in the snippet list yet.
+This port covers the macOS app's core feature set but isn't a line-for-line match. Contacts are a small local address book instead of the system Contacts database, since Windows has no equivalent store shared across ordinary desktop apps. There's no Explorer integration comparable to the macOS Finder Copy Path service. The dynamic-variable set is narrower: no long-form or custom date formats, no reaching further back into clipboard history than the most recent copy, and no cursor-placement token. Import supports one conflict strategy (skip duplicates) rather than a choice between merge, replace, and skip. There's no favorites/starring, duplication, or multi-select delete in the snippet list yet.
 
 If you run into a bug, include your Windows version and Snipster version along with steps to reproduce.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
